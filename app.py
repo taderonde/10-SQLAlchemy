@@ -125,20 +125,27 @@ def summarize_temp_after_date(start):
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
+    # find the most recent date in the data set.
+    most_recent_date_str = session.query(func.max(Measurement.date)).first()[0]
+
+    # convert string date to datetime date
+    most_recent_date = dt.datetime.strptime(most_recent_date_str, "%Y-%m-%d").date()
+
     """Return min, max, and average temperatures after specifified date (inclusive)"""
     #format start date as datetime date
     start_date = dt.datetime.strptime(start, "%Y-%m-%d").date()
     
     # Query data
-    results = session.query(Measurement.date, func.max(Measurement.tobs).label('temp_max'), func.min(Measurement.tobs).label('temp_min'), func.avg(Measurement.tobs).label('temp_avg')).filter(Measurement.date >= start_date).group_by(Measurement.date).all()
+    results = session.query(func.max(Measurement.tobs).label('temp_max'), func.min(Measurement.tobs).label('temp_min'), func.avg(Measurement.tobs).label('temp_avg')).filter(Measurement.date >= start_date).all()
 
     session.close()
     
     # Create a dictionary from the data
     temps_list = []
-    for date, temp_max, temp_min, temp_avg in results:
+    for temp_max, temp_min, temp_avg in results:
         temps_dict = {}
-        temps_dict["date"] = date
+        temps_dict['start_date'] = str(start_date)
+        temps_dict['end_date'] = str(most_recent_date)
         temps_dict["temp_max"] = temp_max
         temps_dict["temp_min"] = temp_min
         temps_dict["temp_avg"] = temp_avg
@@ -157,15 +164,16 @@ def summarize_temp_between_dates(start, end):
     end_date = dt.datetime.strptime(end, "%Y-%m-%d").date()
     
     # Query data
-    results = session.query(Measurement.date, func.max(Measurement.tobs).label('temp_max'), func.min(Measurement.tobs).label('temp_min'), func.avg(Measurement.tobs).label('temp_avg')).filter(Measurement.date >= start_date, Measurement.date <= end_date).group_by(Measurement.date).all()
+    results = session.query(func.max(Measurement.tobs).label('temp_max'), func.min(Measurement.tobs).label('temp_min'), func.avg(Measurement.tobs).label('temp_avg')).filter(Measurement.date >= start_date, Measurement.date <= end_date).all()
 
     session.close()
     
     # Create a dictionary from the data
     temps_list = []
-    for date, temp_max, temp_min, temp_avg in results:
+    for temp_max, temp_min, temp_avg in results:
         temps_dict = {}
-        temps_dict["date"] = date
+        temps_dict["start_date"] = str(start_date)
+        temps_dict["end_date"] = str(end_date)
         temps_dict["temp_max"] = temp_max
         temps_dict["temp_min"] = temp_min
         temps_dict["temp_avg"] = temp_avg
