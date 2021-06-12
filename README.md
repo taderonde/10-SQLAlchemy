@@ -3,7 +3,7 @@
 
 ## Climate Analysis and Exploration
 
-Basic climate analysis and data exploration of Hawaii climate database. Analysis completed using Python, SQLAlchemy ORM queries, Pandas, and Matplotlib.
+Climate analysis and data exploration of Hawaii climate database. Analysis completed using Python, SQLAlchemy ORM queries, Pandas, and Matplotlib.
 
 ### Precipitation Analysis
 
@@ -13,13 +13,13 @@ Basic climate analysis and data exploration of Hawaii climate database. Analysis
 
 ### Station Analysis
 
-* Identify the most active stations (i.e., station with the most measurements) and calculate the lowest, highest, and average temperature.
+* Identified the most active stations (i.e., station with the most measurements) and calculated the lowest, highest, and average temperature.
 
-* Plot most recent 12 months of temperature observation data (TOBS) for this station as histogram
+* Plot of thte most recent 12 months of temperature observation data (TOBS) for this station as histogram
 
 - - -
 
-## Step 2 - Climate App
+## Climate App
 
 Flask API
 
